@@ -10,8 +10,7 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-//INCLUDE END
-
+//INCLUDE END 
 const int TOTALNUM = 25;
 const int TOTALKIND = 12;
 const int UPPER_RANGE_L = 11, UPPER_RANGE_R = 16;
@@ -47,6 +46,9 @@ int rounds = 1;
 int id;
 int chessMap[H][W];
 int startTime;
+short DEBUG_MODE;
+
+short MaxLevel = 3;
 template < class Mem >
 struct MemoryPool
 {
@@ -85,7 +87,6 @@ bool exist(int x, int y) {
 bool exist2(int x, int y) {
     return (LOWER_RANGE_L <= x && x <= UPPER_RANGE_R && 0 <= y && y < W);
 }
-
 
 void show_init(int id)
 {
@@ -200,6 +201,7 @@ void get_init()
 	chessMap[11][1] = arr1[23];
 	chessMap[11][0] = arr1[24];
 }
+
 short eat( int x, int y )
 {
 	x = abs(x);y = abs(y);
@@ -277,15 +279,16 @@ public:
 			steps.push( step );
 		move( step );
 	}
-	void FlashBack(){
-		if( steps.empty() ){ cerr << "Error." << endl;return; }
+	bool FlashBack(){
+		if( steps.empty() )return 0;//{ cerr << "Error." << endl;return; }
 
 		back( steps.top() );
 		steps.pop();
+		return 1;
 	}
 	double GetScore( short type = 1 )
 	{
-		return NowScore;
+		return type*NowScore;
 		
 		
 		double re=0;
@@ -299,11 +302,16 @@ public:
 		}
 		return re*type;
 	}
+	inline double GScore( int chessId )
+	{
+		//if( chessId == 0 )return 0;
+		return chessId > 0 ? Score[chessId] : -Score[-chessId];
+	}
 	double GetScore( const MoveData &mdata, short type = 1 )
 	{
 		double re=0;
-		re += Score[(int)abs(mdata.y[2])] + Score[(int)abs(mdata.y[3])];
-		re -= Score[(int)abs(mdata.x[2])] + Score[(int)abs(mdata.x[3])];
+		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
+		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
 		return re*type;
 	}
 	void move( const MoveData &step )
@@ -457,7 +465,8 @@ public:
 
 			return re;
 		}
-		cerr<<"No return" <<endl;
+		cerr<<"<<< ERROR: No return >>>" <<endl;
+		return re;
 	}
 }board;
 void initialize()
@@ -473,11 +482,7 @@ void change() {
 	board.Move( x,y, xx,yy, 0 );
 
 }
-void printMove( const MoveData& move )
-{
-	cerr << move.x[0] << "," << move.y[0] << " to " << move.x[1] << "," << move.y[1] << endl;
-	cerr << move.x[3] << " change to " << move.y[3] << endl;
-}
+
 std::vector<MoveData> GetAllMove( short type=1 )
 {
 	std::vector<MoveData> moveList;
@@ -525,7 +530,24 @@ struct MoveDataList
 	}
 };
 MoveDataList ThinkingHead;
-short MaxLevel = 3;
+void printMove( const MoveData& move )
+{
+	cerr << move.x[0] << "," << move.y[0] << " to " << move.x[1] << "," << move.y[1] << endl;
+	cerr << move.x[3] << " change to " << move.y[3] << endl;
+}
+void Revival( MoveDataList &ListHead )
+{
+	cerr << "[Revival] Start." << endl;
+		cerr << "Now Score: "<< board.NowScore << endl;
+	for( MoveDataList *p = ListHead.next; p; p=p->next )
+	{
+		//cerr << "." << endl;
+		board.Move( p->data );
+		printMove( p->data );
+		cerr << "Now Score: "<< board.NowScore << endl;
+	}
+	while( board.FlashBack() );
+}
 double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 {
 	typedef std::vector<MoveData> MoveList;
@@ -537,6 +559,9 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 	if( level > MaxLevel )
 	{
 		re = board.GetScore( type );
+		/*
+		if(DEBUG_MODE)
+			cerr << "This Step2" << re << endl;*/
 		return re;
 	}
 	moveList = GetAllMove( type );
@@ -557,6 +582,9 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 		board.FlashBack();
 
 		tmp = tmp*0.95+board.GetScore( type );
+		/*
+		if(DEBUG_MODE)
+			cerr << "This Step1" << tmp << endl;*/
 		if( tmp > re + eps ){
 			re = tmp;
 			ListHead.Link( head );
@@ -576,6 +604,7 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 	return re;
 }
 void make_decision(int &x, int &y, int &xx, int &yy) {
+	
 	if(SECRET[0])
 	{
 		if( (rounds-1) / 2 == 0 )
@@ -591,7 +620,7 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 			return;
 		}
 
-	}else{
+	}else if(SECRET[1]){
 		if( (rounds-1) / 2 == 0 )
 		{
 			if(id == 0)
@@ -617,7 +646,8 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	xx = finalMove.x[1];
 	yy = finalMove.y[1];
 	printMove( finalMove );
-
+	if(DEBUG_MODE)
+		Revival( Head );
 	int nowTime = clock();
 	if( (nowTime - startTime) > 0.8*CLOCKS_PER_SEC && MaxLevel > 2  )
 	//if( rounds > 50 && MaxLevel > 3 )
@@ -642,7 +672,7 @@ int main(int argc, char** argv) {
     }
 
     cerr << "Seed = " << seed << endl;
-    seed = 7933440417;
+    //seed = 7933440417;
     srand(seed);
 
     for (int i = 0; i < H; ++i) {
@@ -657,7 +687,7 @@ int main(int argc, char** argv) {
         if (op == "id") {
             cin >> id;
 			cerr << id << endl;
-            cout << "Excalibur ver2.0 [Faker]" << endl;
+            cout << "Excalibur ver2.1 [Faker]" << endl;
             end();
 		} else if (op == "refresh") {
 			get_init();
@@ -677,10 +707,14 @@ int main(int argc, char** argv) {
             cout << x << " " << y << " " << xx << " " << yy << endl;
             end();
         } else if (op == "debug") {
+        	DEBUG_MODE=1;
         	MaxLevel = 3;
             int x, y, xx, yy;
             make_decision(x, y, xx, yy);
-            board.Move( x,y, xx,yy, 0 );
+            //board.Move( x,y, xx,yy, 0 );
+            DEBUG_MODE=0;
+        } else if (op == "flag") {
+        	cerr << "<<<<<<<<<<<<<<<<<<<<<< flag" << endl;
         }
     }
 }

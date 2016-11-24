@@ -1,72 +1,137 @@
-Seed = 1333278762
+Seed = 7253256
 1
 <3>
-12 4 12 3
+Best Step:0
+11,2 to 12,1
+0 change to 1
+11 2 12 1
 <3>
-15,2 to 14,1
+Best Step:0
+15,1 to 14,1
+0 change to 9
+15 1 14 1
+<3>
+Best Step:0
+13,1 to 13,2
+0 change to 6
+13 1 13 2
+<3>
+Best Step:0
+11,1 to 6,2
+0 change to 9
+11 1 6 2
+<3>
+Best Step:33.3889
+15,2 to 15,1
 0 change to 4
-15 2 14 1
+15 2 15 1
 <3>
-14,4 to 14,3
-0 change to 7
-14 4 14 3
+Best Step:63.0679
+14,2 to 15,2
+0 change to 9
+14 2 15 2
 <3>
+Best Step:104.581
+12,1 to 12,0
+-3 change to 1
+12 1 12 0
+<3>
+Best Step:136.023
 12,0 to 3,0
--6 change to 5
+-6 change to 1
 12 0 3 0
 <3>
+Best Step:255.931
 13,0 to 2,0
 -7 change to 5
 13 0 2 0
 <3>
-2,0 to 2,1
-0 change to 5
-2 0 2 1
+Best Step:295.79
+2,0 to 1,0
+-8 change to 5
+2 0 1 0
 <3>
-2,1 to 2,2
--9 change to 5
-2 1 2 2
+Best Step:296.79
+14,1 to 14,2
+0 change to 9
+14 1 14 2
 <3>
-2,2 to 2,3
-0 change to 5
-2 2 2 3
+Best Step:322.759
+15,4 to 14,3
+0 change to 8
+15 4 14 3
 <3>
-2,3 to 3,3
--6 change to 5
-2 3 3 3
+Best Step:278.582
+11,4 to 11,0
+0 change to 3
+11 4 11 0
 <3>
-14,0 to 1,0
--8 change to 7
-14 0 1 0
+Best Step:278.582
+11,0 to 5,0
+0 change to 3
+11 0 5 0
 <3>
-11,3 to 11,4
--7 change to 4
-11 3 11 4
+Best Step:264.303
+14,4 to 15,4
+0 change to 7
+14 4 15 4
 <3>
-12,3 to 11,4
--2 change to 0
-12 3 11 4
+Best Step:279.439
+13,4 to 5,4
+0 change to 6
+13 4 5 4
 <3>
-1,0 to 3,0
--11 change to 0
-1 0 3 0
+Best Step:293.982
+14,3 to 13,4
+0 change to 8
+14 3 13 4
 <3>
-15,0 to 10,0
-0 change to 2
-15 0 10 0
+Best Step:352.438
+14,0 to 8,0
+0 change to 7
+14 0 8 0
 <3>
-15,1 to 1,1
--10 change to 9
-15 1 1 1
+Best Step:356.148
+13,3 to 12,3
+0 change to 11
+13 3 12 3
 <3>
-10,0 to 1,0
-0 change to 2
-10 0 1 0
+Best Step:340.309
+12,3 to 13,3
+0 change to 11
+12 3 13 3
 <3>
-1,0 to 1,1
-0 change to 2
-1 0 1 1
+Best Step:355.149
+15,4 to 14,3
+0 change to 7
+15 4 14 3
 <3>
-1,1 to 0,1
--12 change to 2
-1 1 0 1
+Best Step:506.673
+14,3 to 15,3
+-9 change to 7
+14 3 15 3
+<3>
+Best Step:515.673
+8,0 to 8,2
+0 change to 7
+8 0 8 2
+<3>
+Best Step:645.518
+8,2 to 6,2
+-7 change to 0
+8 2 6 2
+<3>
+Best Step:675.197
+13,2 to 12,1
+0 change to 6
+13 2 12 1
+<3>
+Best Step:638.191
+12,1 to 11,2
+0 change to 6
+12 1 11 2
+<3>
+Best Step:-9.02462e+06
+14,2 to 15,2
+0 change to 9
+14 2 15 2

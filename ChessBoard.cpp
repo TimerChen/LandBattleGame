@@ -50,15 +50,16 @@ public:
 			steps.push( step );
 		move( step );
 	}
-	void FlashBack(){
-		if( steps.empty() ){ cerr << "Error." << endl;return; }
+	bool FlashBack(){
+		if( steps.empty() )return 0;//{ cerr << "Error." << endl;return; }
 
 		back( steps.top() );
 		steps.pop();
+		return 1;
 	}
 	double GetScore( short type = 1 )
 	{
-		return NowScore;
+		return type*NowScore;
 		
 		
 		double re=0;
@@ -72,11 +73,16 @@ public:
 		}
 		return re*type;
 	}
+	inline double GScore( int chessId )
+	{
+		//if( chessId == 0 )return 0;
+		return chessId > 0 ? Score[chessId] : -Score[-chessId];
+	}
 	double GetScore( const MoveData &mdata, short type = 1 )
 	{
 		double re=0;
-		re += Score[(int)abs(mdata.y[2])] + Score[(int)abs(mdata.y[3])];
-		re -= Score[(int)abs(mdata.x[2])] + Score[(int)abs(mdata.x[3])];
+		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
+		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
 		return re*type;
 	}
 	void move( const MoveData &step )
@@ -230,6 +236,7 @@ public:
 
 			return re;
 		}
-		cerr<<"No return" <<endl;
+		cerr<<"<<< ERROR: No return >>>" <<endl;
+		return re;
 	}
 }board;
