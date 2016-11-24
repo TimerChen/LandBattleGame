@@ -302,8 +302,8 @@ public:
 	double GetScore( const MoveData &mdata, short type = 1 )
 	{
 		double re=0;
-		re += Score[(int)abs(mdata.x[2])] + Score[(int)abs(mdata.x[3])];
-		re -= Score[(int)abs(mdata.y[2])] + Score[(int)abs(mdata.y[3])];
+		re += Score[(int)abs(mdata.y[2])] + Score[(int)abs(mdata.y[3])];
+		re -= Score[(int)abs(mdata.x[2])] + Score[(int)abs(mdata.x[3])];
 		return re*type;
 	}
 	void move( const MoveData &step )
@@ -571,6 +571,8 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 
 
 	}
+	if(level == 1)
+		cerr <<"Best Step:"<< re << "\n";
 	return re;
 }
 void make_decision(int &x, int &y, int &xx, int &yy) {

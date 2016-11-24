@@ -40,6 +40,7 @@ int main( int argc, char *argv[] )
 	}
 	int i,j;
 	//printf("%d %s\n",argc,argv[1]);
+	printf( "Merge file [%s] ......",argv[1] );
 	char OutName[100];
 	if(argc==3)
 	{
@@ -51,5 +52,6 @@ int main( int argc, char *argv[] )
 		*fout=fopen(OutName,"w");
 	MergeIt( argv[1], fout );
 	fclose(fout);
+	printf( "succeeded at [%s].\n", OutName );
 	return 0;
 }
