@@ -57,10 +57,18 @@ public:
 		steps.pop();
 		return 1;
 	}
-	double GetScore( short type = 1 )
+	inline double GScore( int chessId )
 	{
+		//if( chessId == 0 )return 0;
+		return chessId > 0 ? Score[chessId] : -Score[-chessId];
+	}
+	double GetScore( short type = 1, short check = 0 )
+	{
+		#ifdef DEBUG
+			check = 1;
+		#endif
+		if(!check)
 		return type*NowScore;
-		
 		
 		double re=0;
 		int i,j;
@@ -68,22 +76,22 @@ public:
 		for( j = 0; j < 5 ; j++ )
 		if( exist( i,j ) )
 		{
-			if( map->data[i][j] < 0 )re -= Score[-map->data[i][j]];
-			else re += Score[map->data[i][j]];
+			re += GScore( map->data[i][j] );
 		}
+		if( fabs( re - NowScore ) > eps )
+		{
+			
+			cerr << "Score Calculation Error.\n" << "Correct:" << re << "\tWrong:" << NowScore << endl;
+			throw "Score Calculation Error." ;
+		}else
 		return re*type;
 	}
-	inline double GScore( int chessId )
-	{
-		//if( chessId == 0 )return 0;
-		return chessId > 0 ? Score[chessId] : -Score[-chessId];
-	}
-	double GetScore( const MoveData &mdata, short type = 1 )
+	double GetScore( const MoveData &mdata )
 	{
 		double re=0;
 		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
 		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
-		return re*type;
+		return re;
 	}
 	void move( const MoveData &step )
 	{
@@ -97,9 +105,7 @@ public:
 		if(step.y[2])Count[step.y[2]]++;
 		if(step.y[3])Count[step.y[3]]++;
 		
-		short type;
-		type = step.x[2]>0?+1:-1;
-		NowScore += GetScore( step, type );
+		NowScore += GetScore( step );
 	}
 	void back( const MoveData &step )
 	{
@@ -113,9 +119,7 @@ public:
 		if(step.y[2])Count[step.y[2]]--;
 		if(step.y[3])Count[step.y[3]]--;
 		
-		short type;
-		type = step.x[2]>0?+1:-1;
-		NowScore -= GetScore( step, type );
+		NowScore -= GetScore( step );
 	}
 	short checkMove( int x0, int y0, int x1, int y1 )
 	{
@@ -131,7 +135,7 @@ public:
 	{
 		std::vector<Point> re;
 		std::queue<Point> dui;
-		int x1,y1;
+		//int x1,y1;
 		Point start(x0,y0),nextp;
 		std::map<Point,short> vis;
 		dui.push(start);

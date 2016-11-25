@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
         if (op == "id") {
             cin >> id;
 			cerr << id << endl;
-            cout << "Excalibur ver2.1 [Faker]" << endl;
+            cout << "Excalibur ver2.2 [Faker]" << endl;
             end();
 		} else if (op == "refresh") {
 			get_init();

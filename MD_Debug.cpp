@@ -15,4 +15,4 @@ void Revival( MoveDataList &ListHead )
 		cerr << "Now Score: "<< board.NowScore << endl;
 	}
 	while( board.FlashBack() );
-}
+} 
