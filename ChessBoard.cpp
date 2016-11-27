@@ -1,15 +1,11 @@
+
+
 class ChessBoard
 {
 public:
+	#include "ChessBoard.h"
+	#include "GetScore.cpp"
 	ChessBoard(){ map = map_back = NULL; rev = 0; }
-	struct MapData
-	{
-		short data[H][W];
-	}mapData[2], *map, *map_back;
-
-	short rev,originCount[25],*Count;
-	double NowScore; 
-	std::stack<MoveData> steps;
 	void init()
 	{
 		NowScore = 0;
@@ -18,7 +14,10 @@ public:
 		Count = originCount+12;
 		for( int i = 0; i < 17; ++i )
 		for( int j = 0; j < 5 ; ++j )
+		{
 			map->data[i][j] = chessMap[i][j];
+			Count[ chessMap[i][j] ]++;
+		}
 	}
 	void shift(){ swap( map, map_back ); rev^=1; }
 	MoveData getMoveData( int x0, int y0, int x1, int y1 )
@@ -57,14 +56,10 @@ public:
 		steps.pop();
 		return 1;
 	}
-	inline double GScore( int chessId )
-	{
-		//if( chessId == 0 )return 0;
-		return chessId > 0 ? Score[chessId] : -Score[-chessId];
-	}
+	
 	double GetScore( short type = 1, short check = 0 )
 	{
-		#ifdef DEBUG
+		#ifdef DIRECTSOCRE_CHECK
 			check = 1;
 		#endif
 		if(!check)
@@ -86,13 +81,7 @@ public:
 		}else
 		return re*type;
 	}
-	double GetScore( const MoveData &mdata )
-	{
-		double re=0;
-		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
-		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
-		return re;
-	}
+	
 	void move( const MoveData &step )
 	{
 		int x,y;
@@ -100,12 +89,13 @@ public:
 		map->data[x][y] = step.y[2];
 		x = step.x[1];y = step.y[1];
 		map->data[x][y] = step.y[3];
+		
+		NowScore += GetScore( step );
+		
 		if(step.x[2])Count[step.x[2]]--;
 		if(step.x[3])Count[step.x[3]]--;
 		if(step.y[2])Count[step.y[2]]++;
 		if(step.y[3])Count[step.y[3]]++;
-		
-		NowScore += GetScore( step );
 	}
 	void back( const MoveData &step )
 	{
@@ -120,6 +110,7 @@ public:
 		if(step.y[3])Count[step.y[3]]--;
 		
 		NowScore -= GetScore( step );
+		
 	}
 	short checkMove( int x0, int y0, int x1, int y1 )
 	{

@@ -1,4 +1,4 @@
-#include <ctime>
+﻿#include <ctime>
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
@@ -18,9 +18,9 @@ const int LOWER_RANGE_L = 0, LOWER_RANGE_R = 5;
 const int H = 17;
 const int W = 5;
 const double eps = 1e-5;
-const double LOSE_SCORE = -1e7;
+const double LOSE_SCORE = -1e17;
 const int DIR[8][2] = {{-1,0},{+1,0},{0,-1},{0,+1},{-1,-1},{-1,1},{1,-1},{1,1}};
-const double Score[20] = { 0, 40, 35, 9, 8, 7, 6, 2, 1, 9, 30, 11, 1000 };
+const double Score[20] = { 0, 2000, 1000, 500, 100, 50, 10, 2, 1, 500, 1500, 2000, 10000 };
 const short SECRET[10] = {0,0};
 const int typeMap[H][W]=
 {
@@ -47,8 +47,20 @@ int id;
 int chessMap[H][W];
 int startTime;
 short DEBUG_MODE;
+short QUIT;
+//#define OLDSCORE
+//#define DIRECTSOCRE_CHECK
+#define PRUNING
 
-short MaxLevel = 3;
+#ifdef DEBUG
+	//#define SKIP
+#endif
+
+#ifdef SKIP
+short MaxLevel = 1;
+#else
+short MaxLevel = 4;
+#endif
 template < class Mem >
 struct MemoryPool
 {
@@ -94,13 +106,28 @@ void show_init(int id)
 	//this line : kind1 kind2 ... etc
 	//Imagine that the chesses are listed from the bottom to the top, left to right
 	//This is a stupid start:
+	int opt_old[25] = //{9, 11, 9, 9, 2, 2, 10, 10, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 1, 0, 3, 3};
+	{
+		1, 8, 0, 3, 2,
+		//3, 9, 7, 4, 3,
+		4,   6,   10,
+		//5,   7,   11,
+		4, 10,   5, 5,
+		//5, 6,   11, 6,
+		6,   8,   6,
+		//1,   9,   7,
+		2, 8, 3, 9, 7,
+		//2, 9, 4, 10, 8,
+		7, 7, 9, 11, 9
+		//8, 8, 10, 12, 10
+	};
 	int opt[25] = //{9, 11, 9, 9, 2, 2, 10, 10, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 1, 0, 3, 3};
 	{
 		2, 8, 0, 3, 2,
 		//3, 9, 7, 4, 3,
 		4,   6,   10,
 		//5,   7,   11,
-		4, 5,   10, 5,
+		4, 10,   5, 5,
 		//5, 6,   11, 6,
 		6,   8,   6,
 		//1,   9,   7,
@@ -227,10 +254,12 @@ struct MoveData
 {
 	short x[4],y[4];
 };
+
+
 class ChessBoard
 {
 public:
-	ChessBoard(){ map = map_back = NULL; rev = 0; }
+
 	struct MapData
 	{
 		short data[H][W];
@@ -239,6 +268,91 @@ public:
 	short rev,originCount[25],*Count;
 	double NowScore; 
 	std::stack<MoveData> steps;
+
+	inline double GScore( int chessId )
+	{
+		//if( chessId == 0 )return 0;
+		return chessId > 0 ? Score[chessId] : -Score[-chessId];
+	}
+	double GetScore( const MoveData &mdata )
+	{
+		#ifdef OLDSCORE
+		return DirectGetScore( mdata );
+		#endif
+		
+		if( abs(mdata.x[2]) == 11 )
+			return MissileGetScore( mdata );
+		else if( abs(mdata.x[3]) == 11 )
+		{
+			MoveData revMdata;
+			revMdata = mdata;
+			swap( revMdata.x[3], revMdata.x[2] );
+			return MissileGetScore( revMdata );//??
+		}
+		return DirectGetScore( mdata );
+	}
+	double DirectGetScore( const MoveData &mdata )
+	{
+		double re=0;
+		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
+		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
+		return re;
+	}
+	double MissileGetScore( const MoveData &mdata )
+	{
+		if(mdata.x[3] == 0)return 0;
+		
+		short type = mdata.x[2] > 0 ? +1 : -1;
+		if( abs(mdata.x[3]) == 10 ) return GScore( mdata.x[3] );
+		if( abs(mdata.x[3]) == 12 ) return GScore( mdata.x[3] );
+		if( abs(mdata.x[3]) == 11 )//...
+		{
+			if( Count[ mdata.x[2] ] > Count[ mdata.x[3] ] )
+				return Score[11]*type;
+			else 
+				return -Score[11]*type;
+		}
+		if( abs(mdata.x[3]) == 1  )
+		{
+			return Score[1]*type;
+		}else if( abs(mdata.x[3]) == 2 ){
+			if( Count[ mdata.x[2] ] == 2 )
+				//return 70*type;
+				return -GScore( mdata.x[3] );
+			else if( Count[ mdata.x[2] ] == 1  )
+			{ 
+				if( Count[-type*1] )
+					return -GScore( mdata.x[3] )/10;
+				else 
+					return -GScore( mdata.x[3] );
+					//return 100*type;
+				//return -0.5*GScore( mdata.x[2] )-GScore( mdata.x[3] ); 
+			}
+		}else if( abs(mdata.x[3]) <= 8 )
+		{
+			if( abs(mdata.x[3]) >=1 && Count[ -type*1 ] + Count[ -type*2 ] == 0 )
+			{
+				int i;
+				for( i = 3; i <= 8; i++ )
+					if( Count[ -type*i ] )break;
+				if( i == abs( mdata.x[3] ) )
+					return -GScore( mdata.x[3] )/10;//?
+			}
+			return -GScore( mdata.x[2] );
+		}else if( abs(mdata.x[3]) == 9 ){
+			//...
+			/*
+			if( Count[ mdata.x[2] ] == 2 )
+				return -0.7*GScore( mdata.x[2] )-GScore( mdata.x[3] );
+			else if( Count[ mdata.x[2] ] == 1 )
+				return -1.0*GScore( mdata.x[2] )-GScore( mdata.x[3] ); 
+			*/
+		}
+		
+		return DirectGetScore( mdata );
+	}
+
+	ChessBoard(){ map = map_back = NULL; rev = 0; }
 	void init()
 	{
 		NowScore = 0;
@@ -247,7 +361,10 @@ public:
 		Count = originCount+12;
 		for( int i = 0; i < 17; ++i )
 		for( int j = 0; j < 5 ; ++j )
+		{
 			map->data[i][j] = chessMap[i][j];
+			Count[ chessMap[i][j] ]++;
+		}
 	}
 	void shift(){ swap( map, map_back ); rev^=1; }
 	MoveData getMoveData( int x0, int y0, int x1, int y1 )
@@ -286,10 +403,14 @@ public:
 		steps.pop();
 		return 1;
 	}
-	double GetScore( short type = 1 )
+	
+	double GetScore( short type = 1, short check = 0 )
 	{
+		#ifdef DIRECTSOCRE_CHECK
+			check = 1;
+		#endif
+		if(!check)
 		return type*NowScore;
-		
 		
 		double re=0;
 		int i,j;
@@ -297,23 +418,17 @@ public:
 		for( j = 0; j < 5 ; j++ )
 		if( exist( i,j ) )
 		{
-			if( map->data[i][j] < 0 )re -= Score[-map->data[i][j]];
-			else re += Score[map->data[i][j]];
+			re += GScore( map->data[i][j] );
 		}
+		if( fabs( re - NowScore ) > eps )
+		{
+			
+			cerr << "Score Calculation Error.\n" << "Correct:" << re << "\tWrong:" << NowScore << endl;
+			throw "Score Calculation Error." ;
+		}else
 		return re*type;
 	}
-	inline double GScore( int chessId )
-	{
-		//if( chessId == 0 )return 0;
-		return chessId > 0 ? Score[chessId] : -Score[-chessId];
-	}
-	double GetScore( const MoveData &mdata, short type = 1 )
-	{
-		double re=0;
-		re += GScore(mdata.y[2]) + GScore(mdata.y[3]);
-		re -= GScore(mdata.x[2]) + GScore(mdata.x[3]);
-		return re*type;
-	}
+	
 	void move( const MoveData &step )
 	{
 		int x,y;
@@ -321,14 +436,13 @@ public:
 		map->data[x][y] = step.y[2];
 		x = step.x[1];y = step.y[1];
 		map->data[x][y] = step.y[3];
+		
+		NowScore += GetScore( step );
+		
 		if(step.x[2])Count[step.x[2]]--;
 		if(step.x[3])Count[step.x[3]]--;
 		if(step.y[2])Count[step.y[2]]++;
 		if(step.y[3])Count[step.y[3]]++;
-		
-		short type;
-		type = step.x[2]>0?+1:-1;
-		NowScore += GetScore( step, type );
 	}
 	void back( const MoveData &step )
 	{
@@ -342,9 +456,8 @@ public:
 		if(step.y[2])Count[step.y[2]]--;
 		if(step.y[3])Count[step.y[3]]--;
 		
-		short type;
-		type = step.x[2]>0?+1:-1;
-		NowScore -= GetScore( step, type );
+		NowScore -= GetScore( step );
+		
 	}
 	short checkMove( int x0, int y0, int x1, int y1 )
 	{
@@ -360,7 +473,7 @@ public:
 	{
 		std::vector<Point> re;
 		std::queue<Point> dui;
-		int x1,y1;
+		//int x1,y1;
 		Point start(x0,y0),nextp;
 		std::map<Point,short> vis;
 		dui.push(start);
@@ -479,7 +592,15 @@ void change() {
     cin >> x >> y >> xx >> yy >> col >> kind;
 	//cerr << "Get updates:"  << endl;
 	//cerr << x << ' ' << y << ' ' << xx << ' ' << yy << ' ' << col << ' ' << kind << endl;
+	
+    if( board.NowScore < LOSE_SCORE )
+		cerr << "[ERROR] at change Step1" << board.NowScore  << endl;
+
 	board.Move( x,y, xx,yy, 0 );
+	
+    if( board.NowScore < LOSE_SCORE )
+		cerr << "[ERROR] at change Step1" << board.NowScore  << endl;
+
 
 }
 
@@ -530,6 +651,7 @@ struct MoveDataList
 	}
 };
 MoveDataList ThinkingHead;
+double Thinking( MoveDataList &ListHead, short level = 1, short type=1, double UpAns=-LOSE_SCORE );
 void printMove( const MoveData& move )
 {
 	cerr << move.x[0] << "," << move.y[0] << " to " << move.x[1] << "," << move.y[1] << endl;
@@ -547,9 +669,35 @@ void Revival( MoveDataList &ListHead )
 		cerr << "Now Score: "<< board.NowScore << endl;
 	}
 	while( board.FlashBack() );
+} 
+void ReThinking( MoveDataList &ListHead, short deep = 1, short tMaxLevel = MaxLevel ){
+	cerr << "[ReThink] Start." << endl;
+		cerr << "Now Score: "<< board.NowScore << endl;
+	int i=1;
+	MoveDataList *p=&ListHead;
+	short  type = 1;
+	for( i=1; i<deep; p=p->next,i++ )
+	{
+		//cerr << "." << endl;
+		board.Move( p->next->data );
+		printMove( p->next->data );
+		cerr << "Now Score: "<< board.NowScore << endl;
+		type*=-1;
+	}
+	double tmp;
+	DEBUG_MODE = 2;
+	swap(tMaxLevel,MaxLevel);
+	tmp = Thinking( *p, deep, type );
+	Revival( *p );
+	swap(tMaxLevel,MaxLevel);
+	DEBUG_MODE = 1;
 }
-double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
+int DfsNumber[30]; 
+double Thinking( MoveDataList &ListHead, short level, short type, double UpAns )
 {
+	
+	DfsNumber[level]++;
+	
 	typedef std::vector<MoveData> MoveList;
 	double re=LOSE_SCORE, tmp;
 	MoveList moveList;
@@ -559,50 +707,174 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 	if( level > MaxLevel )
 	{
 		re = board.GetScore( type );
-		/*
-		if(DEBUG_MODE)
-			cerr << "This Step2" << re << endl;*/
+		
+	//	if(DEBUG_MODE)
+//			cerr << "This Step2" << re << endl;
 		return re;
 	}
 	moveList = GetAllMove( type );
 	if( moveList.empty() )
 		return LOSE_SCORE;
-
 	for( MoveList::iterator ii = moveList.begin(); ii != moveList.end(); ++ii )
 	{
 
 		//if((clock() - startTime) > 0.9*CLOCKS_PER_SEC) break;
-
+		
 		head = MoveDataListPool.New();
 		//head = new MoveDataList;
 		head->data = *ii;
 		//if(ii->x[2] == -9 && ii->x[3]==)
+		double SaveScore = board.NowScore;
 		board.Move( *ii );
-		tmp = -Thinking( *head, level+1, -type );
-		board.FlashBack();
-
-		tmp = tmp*0.95+board.GetScore( type );
 		/*
+		if( board.NowScore < LOSE_SCORE )
+		{
+			
+			cerr << "[ERROR] at This Step1" << board.NowScore << "level of" << level << endl;
+			//cerr << "Move: " << ii->x[2] << "," << ii->x[3] <<endl;
+			board.FlashBack();
+			DEBUG_MODE = 1;
+			board.Move( *ii );
+			cerr << "[ERROR] at This Step1" << board.NowScore << "level of" << level << endl;
+			QUIT = 1;
+		}*/
+		/*
+		if( DEBUG_MODE && level == 1 )
+		{
+			if( head->data.x[0] == 5 && head->data.y[0] == 1
+				&&  head->data.x[1] == 5 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you"	 << endl;
+					}
+		}
+		*/
+		/*
+		if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 6 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you1.1"	 << endl;
+						DEBUG_MODE = 2;
+					}
+		if( DEBUG_MODE && level == 1 )
+		{
+			if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 6 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you1.1"	 << endl;
+						DEBUG_MODE = 2;
+					}
+			if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 12 && head->data.y[1] == 1 )
+					{
+						cerr << "catch you1.2"	 << endl;
+					}
+		}
+		if( DEBUG_MODE==2 && level == 2 )
+		{
+			if( head->data.x[0] == 8 && head->data.y[0] == 0
+				&&  head->data.x[1] == 11 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you2.1"	 << endl;
+					}
+			else if(head->data.x[0] == 8 && head->data.y[0] == 0){
+				cerr << ">>fucking move to "<< head->data.x[1] <<" "<< head->data.y[1] << endl;
+			}
+		}*/
+		tmp = -Thinking( *head, level+1, -type, -re );
+		
+		if( DEBUG_MODE==2 && level == 2 )
+		{
+			if( head->data.x[0] == 8 && head->data.y[0] == 0
+				&&  head->data.x[1] == 11 && head->data.y[1] == 0 )
+					{
+						cerr << "[FUCK]catch you2.1\n"	 << endl;
+						//Revival();
+						cerr << endl;
+					}
+			
+		}
+		board.FlashBack();
+		/*
+		if( SaveScore != board.NowScore )
+		{
+			DEBUG_MODE = 1;
+			cerr << "[ERROR]" << endl;
+			board.Move( *ii );
+			board.FlashBack();
+			
+			QUIT = 1;
+		}
+		//tmp = tmp*0.95+board.GetScore( type );
 		if(DEBUG_MODE)
-			cerr << "This Step1" << tmp << endl;*/
+		{
+			if( level == 1 )
+			{
+				cerr << "This Step1" << tmp << endl;
+				
+				
+			}
+		}*/
 		if( tmp > re + eps ){
 			re = tmp;
 			ListHead.Link( head );
+			if(level==1&&DEBUG_MODE)
+				cerr << "[Update Ans]" << endl;
 		}else if( fabs(re-tmp)<eps && rand()%10==0 ){
 			re = tmp;
 			ListHead.Link( head );
+			if(level==1&&DEBUG_MODE)
+				cerr << "[Update Ans]" << endl;
 		}else
 			MoveDataListPool.Delete( head );
 			//delete( head );
 		//tmp += board.GetScore();
-
-
-
+		#ifdef PRUNING 
+		if( re > UpAns+eps )
+		{
+			re = UpAns+1;
+			break;
+		}
+		if( rounds <= 3 )
+		{
+			if( re+eps > UpAns )
+			{
+				re = UpAns+1;
+				break;
+			}
+		}else{
+			if( re+eps > UpAns && rand()%10==0 )
+			{
+				re = UpAns+1;
+				break;
+			}
+		}
+		#endif
+		if(QUIT)break;
 	}
+	re = re*0.95+board.GetScore( type );
 	if(level == 1)
-		cerr <<"Best Step:"<< re << "\n";
+		cerr <<"Best Step:"<< re  << " Addition:" << re-board.GetScore( type ) << endl;
 	return re;
 }
+
+
+//Bfs
+/*
+struct BfsTree
+{
+	
+	vector<BfsTree>NextStep;
+}BfsROOT;
+
+queue<BfsTree>BfsQueue;
+void Bfs_Thinking( int MaxDeepth )
+{
+	while(  )
+	{
+		
+	}
+}*/
+
 void make_decision(int &x, int &y, int &xx, int &yy) {
 	
 	if(SECRET[0])
@@ -639,7 +911,14 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	MoveDataList Head;
 	double tmp;
 	tmp = Thinking( Head );
-
+	cerr << "Dfs Number:";
+	for( int i = 1; i <= MaxLevel+1; i++ )
+	{
+		cerr << " [" << i << "] " << DfsNumber[i] ;
+		DfsNumber[i] = 0;
+	}cerr << endl; 
+	if( !Head.next )
+		return;
 	finalMove = Head.next->data;
 	x = finalMove.x[0];
 	y = finalMove.y[0];
@@ -647,13 +926,23 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	yy = finalMove.y[1];
 	printMove( finalMove );
 	if(DEBUG_MODE)
+	{
 		Revival( Head );
+		ReThinking( Head, 2 );
+		Head.next->next->data.x[2] = -1;
+		Head.next->next->data.y[2] = 0;
+		Head.next->next->data.x[3] = 2;
+		Head.next->next->data.y[2] = -1;
+		Revival( Head );
+	}
 	int nowTime = clock();
+	/*
 	if( (nowTime - startTime) > 0.8*CLOCKS_PER_SEC && MaxLevel > 2  )
+		MaxLevel--;*/
 	//if( rounds > 50 && MaxLevel > 3 )
-		MaxLevel--;
 	//board.Move( x,y, xx,yy, 0 );
 }
+
 
 inline void end() {
     std::cout << "END\n" << std::flush;
@@ -661,7 +950,7 @@ inline void end() {
 
 
 int main(int argc, char** argv) {
-		//freopen("ai1_stdin.log","r",stdin);
+		 //freopen("ai0_stdin.log","r",stdin);
 		//freopen("in.txt","r",stdin);
     unsigned seed = time(0);
     if (argc == 2) {
@@ -672,7 +961,7 @@ int main(int argc, char** argv) {
     }
 
     cerr << "Seed = " << seed << endl;
-    //seed = 7933440417;
+    //seed = 251413426;
     srand(seed);
 
     for (int i = 0; i < H; ++i) {
@@ -680,6 +969,7 @@ int main(int argc, char** argv) {
             chessMap[i][j] = 0;
         }
     }
+    
     string op;
     while (true) {
         cin >> op;
@@ -687,7 +977,10 @@ int main(int argc, char** argv) {
         if (op == "id") {
             cin >> id;
 			cerr << id << endl;
-            cout << "Excalibur ver2.1 [Faker]" << endl;
+			if( 1 )
+            	cout << "Despration" << endl;
+            else 
+            	cout << "[えら喰を敵が我、よ狼] 7.3rev rubilacxE" << endl;
             end();
 		} else if (op == "refresh") {
 			get_init();
@@ -696,25 +989,36 @@ int main(int argc, char** argv) {
 			show_init(id);
 			end();
 		} else if (op == "message") {
+			cerr << "Round: " << rounds << endl;
             change();
+            cerr << "NowScore: "<<board.NowScore << endl;
             rounds++;
         } else if (op == "action") {
         	//board.Move( 11,2, 10,2 );
+			cerr << "Round: " << rounds << endl;
         	cerr<<'<'<< MaxLevel<<'>' << endl;
             int x, y, xx, yy;
             make_decision(x, y, xx, yy);
-		cerr << x << " " << y << " " << xx << " " << yy << endl;
+			cerr << x << " " << y << " " << xx << " " << yy << endl;
             cout << x << " " << y << " " << xx << " " << yy << endl;
+    		cerr << board.NowScore; 
             end();
         } else if (op == "debug") {
+			cerr << "Debug:" << endl;
+			cerr << "Round: " << rounds << endl;
         	DEBUG_MODE=1;
-        	MaxLevel = 3;
+        	MaxLevel = 4;
             int x, y, xx, yy;
             make_decision(x, y, xx, yy);
             //board.Move( x,y, xx,yy, 0 );
             DEBUG_MODE=0;
+            QUIT =1;
         } else if (op == "flag") {
         	cerr << "<<<<<<<<<<<<<<<<<<<<<< flag" << endl;
         }
+        cerr << "Used time:" << (clock()-startTime )*1./CLOCKS_PER_SEC << endl;
+        
+        if(QUIT) 
+			break;
     }
 }

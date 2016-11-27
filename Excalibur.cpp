@@ -1,4 +1,4 @@
-#include <ctime>
+﻿#include <ctime>
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
@@ -60,7 +60,15 @@ void change() {
     cin >> x >> y >> xx >> yy >> col >> kind;
 	//cerr << "Get updates:"  << endl;
 	//cerr << x << ' ' << y << ' ' << xx << ' ' << yy << ' ' << col << ' ' << kind << endl;
+	
+    if( board.NowScore < LOSE_SCORE )
+		cerr << "[ERROR] at change Step1" << board.NowScore  << endl;
+
 	board.Move( x,y, xx,yy, 0 );
+	
+    if( board.NowScore < LOSE_SCORE )
+		cerr << "[ERROR] at change Step1" << board.NowScore  << endl;
+
 
 }
 #include "MakeDecision.cpp"
@@ -71,7 +79,7 @@ inline void end() {
 
 
 int main(int argc, char** argv) {
-		//freopen("ai1_stdin.log","r",stdin);
+		 //freopen("ai0_stdin.log","r",stdin);
 		//freopen("in.txt","r",stdin);
     unsigned seed = time(0);
     if (argc == 2) {
@@ -82,7 +90,7 @@ int main(int argc, char** argv) {
     }
 
     cerr << "Seed = " << seed << endl;
-    //seed = 7933440417;
+    //seed = 251413426;
     srand(seed);
 
     for (int i = 0; i < H; ++i) {
@@ -97,7 +105,10 @@ int main(int argc, char** argv) {
         if (op == "id") {
             cin >> id;
 			cerr << id << endl;
-            cout << "Excalibur ver2.2 [Faker]" << endl;
+			if( 1 )
+            	cout << "Despration" << endl;
+            else 
+            	cout << "[えら喰を敵が我、よ狼] 7.3rev rubilacxE" << endl;
             end();
 		} else if (op == "refresh") {
 			get_init();
@@ -106,25 +117,36 @@ int main(int argc, char** argv) {
 			show_init(id);
 			end();
 		} else if (op == "message") {
+			cerr << "Round: " << rounds << endl;
             change();
+            cerr << "NowScore: "<<board.NowScore << endl;
             rounds++;
         } else if (op == "action") {
         	//board.Move( 11,2, 10,2 );
+			cerr << "Round: " << rounds << endl;
         	cerr<<'<'<< MaxLevel<<'>' << endl;
             int x, y, xx, yy;
             make_decision(x, y, xx, yy);
-		cerr << x << " " << y << " " << xx << " " << yy << endl;
+			cerr << x << " " << y << " " << xx << " " << yy << endl;
             cout << x << " " << y << " " << xx << " " << yy << endl;
+    		cerr << board.NowScore; 
             end();
         } else if (op == "debug") {
+			cerr << "Debug:" << endl;
+			cerr << "Round: " << rounds << endl;
         	DEBUG_MODE=1;
-        	MaxLevel = 3;
+        	MaxLevel = 4;
             int x, y, xx, yy;
             make_decision(x, y, xx, yy);
             //board.Move( x,y, xx,yy, 0 );
             DEBUG_MODE=0;
+            QUIT =1;
         } else if (op == "flag") {
         	cerr << "<<<<<<<<<<<<<<<<<<<<<< flag" << endl;
         }
+        cerr << "Used time:" << (clock()-startTime )*1./CLOCKS_PER_SEC << endl;
+        
+        if(QUIT) 
+			break;
     }
 }

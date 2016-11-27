@@ -16,3 +16,25 @@ void Revival( MoveDataList &ListHead )
 	}
 	while( board.FlashBack() );
 } 
+void ReThinking( MoveDataList &ListHead, short deep = 1, short tMaxLevel = MaxLevel ){
+	cerr << "[ReThink] Start." << endl;
+		cerr << "Now Score: "<< board.NowScore << endl;
+	int i=1;
+	MoveDataList *p=&ListHead;
+	short  type = 1;
+	for( i=1; i<deep; p=p->next,i++ )
+	{
+		//cerr << "." << endl;
+		board.Move( p->next->data );
+		printMove( p->next->data );
+		cerr << "Now Score: "<< board.NowScore << endl;
+		type*=-1;
+	}
+	double tmp;
+	DEBUG_MODE = 2;
+	swap(tMaxLevel,MaxLevel);
+	tmp = Thinking( *p, deep, type );
+	Revival( *p );
+	swap(tMaxLevel,MaxLevel);
+	DEBUG_MODE = 1;
+}

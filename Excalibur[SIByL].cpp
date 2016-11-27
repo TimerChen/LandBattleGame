@@ -585,7 +585,8 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	MoveDataList Head;
 	double tmp;
 	tmp = Thinking( Head );
-	
+	if( !Head.next )
+		return;
 	finalMove = Head.next->data;
 	x = finalMove.x[0];
 	y = finalMove.y[0];
@@ -657,5 +658,6 @@ int main(int argc, char** argv) {
             make_decision(x, y, xx, yy);
             board.Move( x,y, xx,yy, 0 );
         }
+        cerr << "Used time:" << (clock()-startTime )*1./CLOCKS_PER_SEC << endl;
     }
 }

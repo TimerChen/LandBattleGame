@@ -46,9 +46,14 @@ struct MoveDataList
 	}
 };
 MoveDataList ThinkingHead;
+double Thinking( MoveDataList &ListHead, short level = 1, short type=1, double UpAns=-LOSE_SCORE );
 #include "MD_Debug.cpp"
-double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
+int DfsNumber[30]; 
+double Thinking( MoveDataList &ListHead, short level, short type, double UpAns )
 {
+	
+	DfsNumber[level]++;
+	
 	typedef std::vector<MoveData> MoveList;
 	double re=LOSE_SCORE, tmp;
 	MoveList moveList;
@@ -58,50 +63,158 @@ double Thinking( MoveDataList &ListHead, short level = 1, short type=1 )
 	if( level > MaxLevel )
 	{
 		re = board.GetScore( type );
-		/*
-		if(DEBUG_MODE)
-			cerr << "This Step2" << re << endl;*/
+		
+	//	if(DEBUG_MODE)
+//			cerr << "This Step2" << re << endl;
 		return re;
 	}
 	moveList = GetAllMove( type );
 	if( moveList.empty() )
 		return LOSE_SCORE;
-
 	for( MoveList::iterator ii = moveList.begin(); ii != moveList.end(); ++ii )
 	{
 
 		//if((clock() - startTime) > 0.9*CLOCKS_PER_SEC) break;
-
+		
 		head = MoveDataListPool.New();
 		//head = new MoveDataList;
 		head->data = *ii;
 		//if(ii->x[2] == -9 && ii->x[3]==)
+		double SaveScore = board.NowScore;
 		board.Move( *ii );
-		tmp = -Thinking( *head, level+1, -type );
-		board.FlashBack();
-
-		tmp = tmp*0.95+board.GetScore( type );
 		/*
+		if( board.NowScore < LOSE_SCORE )
+		{
+			
+			cerr << "[ERROR] at This Step1" << board.NowScore << "level of" << level << endl;
+			//cerr << "Move: " << ii->x[2] << "," << ii->x[3] <<endl;
+			board.FlashBack();
+			DEBUG_MODE = 1;
+			board.Move( *ii );
+			cerr << "[ERROR] at This Step1" << board.NowScore << "level of" << level << endl;
+			QUIT = 1;
+		}*/
+		/*
+		if( DEBUG_MODE && level == 1 )
+		{
+			if( head->data.x[0] == 5 && head->data.y[0] == 1
+				&&  head->data.x[1] == 5 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you"	 << endl;
+					}
+		}
+		*/
+		/*
+		if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 6 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you1.1"	 << endl;
+						DEBUG_MODE = 2;
+					}
+		if( DEBUG_MODE && level == 1 )
+		{
+			if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 6 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you1.1"	 << endl;
+						DEBUG_MODE = 2;
+					}
+			if( head->data.x[0] == 11 && head->data.y[0] == 0
+				&&  head->data.x[1] == 12 && head->data.y[1] == 1 )
+					{
+						cerr << "catch you1.2"	 << endl;
+					}
+		}
+		if( DEBUG_MODE==2 && level == 2 )
+		{
+			if( head->data.x[0] == 8 && head->data.y[0] == 0
+				&&  head->data.x[1] == 11 && head->data.y[1] == 0 )
+					{
+						cerr << "catch you2.1"	 << endl;
+					}
+			else if(head->data.x[0] == 8 && head->data.y[0] == 0){
+				cerr << ">>fucking move to "<< head->data.x[1] <<" "<< head->data.y[1] << endl;
+			}
+		}*/
+		tmp = -Thinking( *head, level+1, -type, -re );
+		
+		if( DEBUG_MODE==2 && level == 2 )
+		{
+			if( head->data.x[0] == 8 && head->data.y[0] == 0
+				&&  head->data.x[1] == 11 && head->data.y[1] == 0 )
+					{
+						cerr << "[FUCK]catch you2.1\n"	 << endl;
+						//Revival();
+						cerr << endl;
+					}
+			
+		}
+		board.FlashBack();
+		/*
+		if( SaveScore != board.NowScore )
+		{
+			DEBUG_MODE = 1;
+			cerr << "[ERROR]" << endl;
+			board.Move( *ii );
+			board.FlashBack();
+			
+			QUIT = 1;
+		}
+		//tmp = tmp*0.95+board.GetScore( type );
 		if(DEBUG_MODE)
-			cerr << "This Step1" << tmp << endl;*/
+		{
+			if( level == 1 )
+			{
+				cerr << "This Step1" << tmp << endl;
+				
+				
+			}
+		}*/
 		if( tmp > re + eps ){
 			re = tmp;
 			ListHead.Link( head );
+			if(level==1&&DEBUG_MODE)
+				cerr << "[Update Ans]" << endl;
 		}else if( fabs(re-tmp)<eps && rand()%10==0 ){
 			re = tmp;
 			ListHead.Link( head );
+			if(level==1&&DEBUG_MODE)
+				cerr << "[Update Ans]" << endl;
 		}else
 			MoveDataListPool.Delete( head );
 			//delete( head );
 		//tmp += board.GetScore();
-
-
-
+		#ifdef PRUNING 
+		if( re > UpAns+eps )
+		{
+			re = UpAns+1;
+			break;
+		}
+		if( rounds <= 3 )
+		{
+			if( re+eps > UpAns )
+			{
+				re = UpAns+1;
+				break;
+			}
+		}else{
+			if( re+eps > UpAns && rand()%10==0 )
+			{
+				re = UpAns+1;
+				break;
+			}
+		}
+		#endif
+		if(QUIT)break;
 	}
+	re = re*0.95+board.GetScore( type );
 	if(level == 1)
-		cerr <<"Best Step:"<< re << "\n";
+		cerr <<"Best Step:"<< re  << " Addition:" << re-board.GetScore( type ) << endl;
 	return re;
 }
+
+#include "BFS_Thinking.cpp" 
+
 void make_decision(int &x, int &y, int &xx, int &yy) {
 	
 	if(SECRET[0])
@@ -138,7 +251,14 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	MoveDataList Head;
 	double tmp;
 	tmp = Thinking( Head );
-
+	cerr << "Dfs Number:";
+	for( int i = 1; i <= MaxLevel+1; i++ )
+	{
+		cerr << " [" << i << "] " << DfsNumber[i] ;
+		DfsNumber[i] = 0;
+	}cerr << endl; 
+	if( !Head.next )
+		return;
 	finalMove = Head.next->data;
 	x = finalMove.x[0];
 	y = finalMove.y[0];
@@ -146,10 +266,20 @@ void make_decision(int &x, int &y, int &xx, int &yy) {
 	yy = finalMove.y[1];
 	printMove( finalMove );
 	if(DEBUG_MODE)
+	{
 		Revival( Head );
+		ReThinking( Head, 2 );
+		Head.next->next->data.x[2] = -1;
+		Head.next->next->data.y[2] = 0;
+		Head.next->next->data.x[3] = 2;
+		Head.next->next->data.y[2] = -1;
+		Revival( Head );
+	}
 	int nowTime = clock();
+	/*
 	if( (nowTime - startTime) > 0.8*CLOCKS_PER_SEC && MaxLevel > 2  )
+		MaxLevel--;*/
 	//if( rounds > 50 && MaxLevel > 3 )
-		MaxLevel--;
 	//board.Move( x,y, xx,yy, 0 );
 }
+

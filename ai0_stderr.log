@@ -1,147 +1,607 @@
-Seed = 64136973
+Seed = 256976897
 0
-<3>
-Best Step:0
-5,0 to 10,0
-0 change to 3
-5 0 10 0
-<3>
-Best Step:0
-5,4 to 11,4
--3 change to 0
-5 4 11 4
-<3>
-Best Step:3.33925
-10,0 to 10,4
-0 change to 3
-10 0 10 4
-<3>
-Best Step:-1.41813
+Used time:0
+Used time:0
+Used time:0
+Round: 1
+NowScore: 0
+Used time:0
+Round: 2
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 43 [3] 94 [4] 2349 [5] 9800
+1,0 to 2,1
+0 change to 8
+1 0 2 1
+0Used time:0.015625
+Round: 2
+NowScore: 0
+Used time:0
+Round: 3
+NowScore: 0
+Used time:0
+Round: 4
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 40 [3] 405 [4] 6500 [5] 81948
+1,2 to 2,3
+0 change to 4
+1 2 2 3
+0Used time:0.046875
+Round: 4
+NowScore: 0
+Used time:0
+Round: 5
+NowScore: 0
+Used time:0
+Round: 6
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 38 [3] 384 [4] 6012 [5] 76502
+5,2 to 4,3
+0 change to 1
+5 2 4 3
+0Used time:0.0625
+Round: 6
+NowScore: 0
+Used time:0
+Round: 7
+NowScore: 0
+Used time:0
+Round: 8
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 307 [4] 4888 [5] 67915
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 8
+NowScore: 0
+Used time:0
+Round: 9
+NowScore: 0
+Used time:0
+Round: 10
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 314 [4] 4814 [5] 70681
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.046875
+Round: 10
+NowScore: 0
+Used time:0
+Round: 11
+NowScore: 0
+Used time:0
+Round: 12
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 249 [4] 4076 [5] 56779
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.03125
+Round: 12
+NowScore: 0
+Used time:0
+Round: 13
+NowScore: 0
+Used time:0
+Round: 14
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 320 [4] 5004 [5] 70074
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.0625
+Round: 14
+NowScore: 0
+Used time:0
+Round: 15
+NowScore: 0
+Used time:0
+Round: 16
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 243 [4] 4044 [5] 57640
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.03125
+Round: 16
+NowScore: 0
+Used time:0
+Round: 17
+NowScore: 0
+Used time:0
+Round: 18
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 275 [4] 4509 [5] 62212
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.046875
+Round: 18
+NowScore: 0
+Used time:0
+Round: 19
+NowScore: 0
+Used time:0
+Round: 20
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 315 [4] 5303 [5] 74356
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 20
+NowScore: 0
+Used time:0
+Round: 21
+NowScore: 0
+Used time:0
+Round: 22
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 272 [4] 4497 [5] 65328
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.046875
+Round: 22
+NowScore: 0
+Used time:0
+Round: 23
+NowScore: 0
+Used time:0
+Round: 24
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 307 [4] 4895 [5] 70063
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 24
+NowScore: 0
+Used time:0
+Round: 25
+NowScore: 0
+Used time:0
+Round: 26
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 269 [4] 4323 [5] 59048
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.03125
+Round: 26
+NowScore: 0
+Used time:0
+Round: 27
+NowScore: 0
+Used time:0
+Round: 28
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 355 [4] 5314 [5] 71293
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 28
+NowScore: 0
+Used time:0
+Round: 29
+NowScore: 0
+Used time:0
+Round: 30
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 279 [4] 4500 [5] 60660
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.03125
+Round: 30
+NowScore: 0
+Used time:0
+Round: 31
+NowScore: 0
+Used time:0
+Round: 32
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 331 [4] 4849 [5] 66320
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 32
+NowScore: 0
+Used time:0
+Round: 33
+NowScore: 0
+Used time:0
+Round: 34
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 282 [4] 4186 [5] 58100
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.03125
+Round: 34
+NowScore: 0
+Used time:0
+Round: 35
+NowScore: 0
+Used time:0
+Round: 36
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 42 [3] 309 [4] 4929 [5] 68904
+1,3 to 1,2
+0 change to 9
+1 3 1 2
+0Used time:0.046875
+Round: 36
+NowScore: 0
+Used time:0
+Round: 37
+NowScore: 0
+Used time:0
+Round: 38
+<4>
+Best Step:0 Addition:0
+Dfs Number: [1] 1 [2] 41 [3] 313 [4] 4942 [5] 66364
+1,2 to 1,3
+0 change to 9
+1 2 1 3
+0Used time:0.046875
+Round: 38
+NowScore: 0
+Used time:0
+Round: 39
+NowScore: 0
+Used time:0
+Round: 40
+<4>
+Best Step:20.1883 Addition:20.1883
+Dfs Number: [1] 1 [2] 48 [3] 511 [4] 10390 [5] 177205
 5,1 to 5,0
 0 change to 4
 5 1 5 0
-<3>
-Best Step:9.74912
-5,0 to 11,0
--9 change to 4
-5 0 11 0
-<3>
-Best Step:2.13025
-10,4 to 11,4
--4 change to 3
-10 4 11 4
-<3>
-Best Step:-13.7372
-5,2 to 5,0
-0 change to 1
-5 2 5 0
-<3>
-Best Step:-20.7372
+0Used time:0.09375
+Round: 40
+NowScore: 0
+Used time:0
+Round: 41
+NowScore: 0
+Used time:0
+Round: 42
+<4>
+Best Step:65.3644 Addition:65.3644
+Dfs Number: [1] 1 [2] 32 [3] 262 [4] 6400 [5] 97522
 5,0 to 12,0
--5 change to 1
+-5 change to 4
 5 0 12 0
-<3>
-Best Step:-19.8347
-12,0 to 13,0
--5 change to 1
-12 0 13 0
-<3>
-Best Step:-33.5875
-13,0 to 14,0
--7 change to 1
-13 0 14 0
-<3>
-Best Step:-43.1225
-14,0 to 15,0
--2 change to 1
-14 0 15 0
-<3>
-Best Step:-16.22
-15,0 to 15,1
--9 change to 1
-15 0 15 1
-<3>
-Best Step:-16.1225
-15,1 to 15,2
--4 change to 1
-15 1 15 2
-<3>
-Best Step:-9
-15,2 to 14,2
--9 change to 1
-15 2 14 2
-<3>
-Best Step:0.857375
-3,0 to 13,0
--6 change to 0
-3 0 13 0
-<3>
-Best Step:0.857375
-3,1 to 3,2
+0Used time:0.0625
+Round: 42
+NowScore: 50
+Used time:0
+Round: 43
+NowScore: -450
+Used time:0
+Round: 44
+<4>
+Best Step:-8399.71 Addition:-7949.71
+Dfs Number: [1] 1 [2] 36 [3] 1557 [4] 4554 [5] 221979
+4,0 to 5,0
 0 change to 11
-3 1 3 2
-<3>
-Best Step:-0.809875
-2,0 to 15,0
--8 change to 7
-2 0 15 0
-<3>
-Best Step:22.0114
-15,0 to 8,0
+4 0 5 0
+-450Used time:0.0625
+Round: 44
+NowScore: -450
+Used time:0
+Round: 45
+NowScore: -1950
+Used time:0
+Round: 46
+<4>
+Best Step:-33125.1 Addition:-31175.1
+Dfs Number: [1] 1 [2] 37 [3] 1308 [4] 2695 [5] 111670
+4,3 to 5,3
+-1 change to 0
+4 3 5 3
+-1950Used time:0.015625
+Round: 46
+NowScore: -1950
+Used time:0
+Round: 47
+NowScore: -1950
+Used time:0
+Round: 48
+<4>
+Best Step:-34450.7 Addition:-32500.7
+Dfs Number: [1] 1 [2] 37 [3] 1500 [4] 2857 [5] 121767
+3,0 to 10,0
+0 change to 6
+3 0 10 0
+-1950Used time:0.03125
+Round: 48
+NowScore: -1950
+Used time:0
+Round: 49
+NowScore: -1960
+Used time:0
+Round: 50
+<4>
+Best Step:-35068.1 Addition:-33108.1
+Dfs Number: [1] 1 [2] 39 [3] 1636 [4] 3104 [5] 136769
+2,0 to 8,0
 0 change to 7
-15 0 8 0
-<3>
-Best Step:61.7475
-5,3 to 15,3
+2 0 8 0
+-1960Used time:0.03125
+Round: 50
+NowScore: -1960
+Used time:0
+Round: 51
+NowScore: -1962
+Used time:0
+Round: 52
+<4>
+Best Step:-35506.8 Addition:-33544.8
+Dfs Number: [1] 1 [2] 34 [3] 1522 [4] 2678 [5] 121092
+5,4 to 11,4
+-3 change to 0
+5 4 11 4
+-1962Used time:0.015625
+Round: 52
+NowScore: -1962
+Used time:0
+Round: 53
+NowScore: -1962
+Used time:0
+Round: 54
+<4>
+Best Step:-33927.9 Addition:-31965.9
+Dfs Number: [1] 1 [2] 34 [3] 1245 [4] 2354 [5] 94616
+4,4 to 6,4
+0 change to 5
+4 4 6 4
+-1962Used time:0.015625
+Round: 54
+NowScore: -1962
+Used time:0
+Round: 55
+NowScore: -2012
+Used time:0
+Round: 56
+<4>
+Best Step:-35321.2 Addition:-33309.2
+Dfs Number: [1] 1 [2] 33 [3] 1281 [4] 2330 [5] 100592
+3,4 to 5,4
+0 change to 5
+3 4 5 4
+-2012Used time:0.015625
+Round: 56
+NowScore: -2012
+Used time:0
+Round: 57
+NowScore: -2062
+Used time:0
+Round: 58
+<4>
+Best Step:-37298 Addition:-35236
+Dfs Number: [1] 1 [2] 34 [3] 1468 [4] 2895 [5] 125697
+2,4 to 4,4
+0 change to 7
+2 4 4 4
+-2062Used time:0.015625
+Round: 58
+NowScore: -2062
+Used time:0
+Round: 59
+NowScore: -2062
+Used time:0
+Round: 60
+<4>
+Best Step:-35451.8 Addition:-33389.8
+Dfs Number: [1] 1 [2] 43 [3] 1539 [4] 3443 [5] 122486
+4,4 to 15,4
+-8 change to 7
+4 4 15 4
+-2062Used time:0.03125
+Round: 60
+NowScore: -2061
+Used time:0
+Round: 61
+NowScore: -4061
+Used time:0
+Round: 62
+<4>
+Best Step:-59934.5 Addition:-55873.5
+Dfs Number: [1] 1 [2] 54 [3] 1252 [4] 4250 [5] 125851
+15,4 to 13,4
+0 change to 7
+15 4 13 4
+-4061Used time:0.015625
+Round: 62
+NowScore: -4061
+Used time:0.015625
+Round: 63
+NowScore: -4063
+Used time:0
+Round: 64
+<4>
+Best Step:-63168.4 Addition:-59105.4
+Dfs Number: [1] 1 [2] 40 [3] 1123 [4] 2938 [5] 115498
+1,4 to 13,4
+-6 change to 2
+1 4 13 4
+-4063Used time:0.015625
+Round: 64
+NowScore: -4053
+Used time:0
+Round: 65
+NowScore: -5053
+Used time:0
+Round: 66
+<4>
+Best Step:-36930.1 Addition:-31877.1
+Dfs Number: [1] 1 [2] 64 [3] 923 [4] 5774 [5] 170713
+1,3 to 15,3
 -10 change to 9
-5 3 15 3
-<3>
-Best Step:74.1975
-14,2 to 13,2
-0 change to 1
-14 2 13 2
-<3>
-Best Step:74.1524
-8,0 to 13,0
+1 3 15 3
+-5053Used time:0.046875
+Round: 66
+NowScore: -3553
+Used time:0
+Round: 67
+NowScore: -4053
+Used time:0
+Round: 68
+<4>
+Best Step:-58546.8 Addition:-54493.8
+Dfs Number: [1] 1 [2] 32 [3] 682 [4] 1772 [5] 50965
+2,2 to 1,2
+0 change to 9
+2 2 1 2
+-4053Used time:0.015625
+Round: 68
+NowScore: -4053
+Used time:0
+Round: 69
+NowScore: -4053
+Used time:0
+Round: 70
+<4>
+Best Step:-25612.8 Addition:-21559.8
+Dfs Number: [1] 1 [2] 65 [3] 765 [4] 5643 [5] 137966
+1,2 to 15,3
+0 change to 9
+1 2 15 3
+-4053Used time:0.03125
+Round: 70
+NowScore: -4053
+Used time:0
+Round: 71
+NowScore: -4553
+Used time:0
+Round: 72
+<4>
+Best Step:-65772.9 Addition:-61219.9
+Dfs Number: [1] 1 [2] 32 [3] 682 [4] 1719 [5] 49590
+2,1 to 1,2
+0 change to 8
+2 1 1 2
+-4553Used time:0.015625
+Round: 72
+NowScore: -4553
+Used time:0
+Round: 73
+NowScore: -4553
+Used time:0
+Round: 74
+<4>
+Best Step:-64442.9 Addition:-59889.9
+Dfs Number: [1] 1 [2] 30 [3] 610 [4] 1554 [5] 43704
+1,2 to 1,4
+0 change to 8
+1 2 1 4
+-4553Used time:0.015625
+Round: 74
+NowScore: -4553
+Used time:0
+Round: 75
+NowScore: -4553
+Used time:0
+Round: 76
+<4>
+Best Step:-70449.8 Addition:-65896.8
+Dfs Number: [1] 1 [2] 40 [3] 1020 [4] 2334 [5] 73411
+2,3 to 3,2
+0 change to 4
+2 3 3 2
+-4553Used time:0.015625
+Round: 76
+NowScore: -4553
+Used time:0
+Round: 77
+NowScore: -4553
+Used time:0
+Round: 78
+<4>
+Best Step:-71546.2 Addition:-66993.2
+Dfs Number: [1] 1 [2] 38 [3] 1033 [4] 2211 [5] 75528
+12,0 to 13,0
+0 change to 4
+12 0 13 0
+-4553Used time:0.015625
+Round: 78
+NowScore: -4553
+Used time:0
+Round: 79
+NowScore: -4653
+Used time:0
+Round: 80
+<4>
+Best Step:-79101.4 Addition:-74448.4
+Dfs Number: [1] 1 [2] 27 [3] 943 [4] 1656 [5] 67037
+3,1 to 3,0
+0 change to 6
+3 1 3 0
+-4653Used time:0.015625
+Round: 80
+NowScore: -4653
+Used time:0
+Round: 81
+NowScore: -4663
+Used time:0
+Round: 82
+<4>
+Best Step:-90535.6 Addition:-85872.6
+Dfs Number: [1] 1 [2] 25 [3] 1690 [4] 2278 [5] 149930
+1,4 to 5,4
+0 change to 8
+1 4 5 4
+-4663Used time:0.03125
+Round: 82
+NowScore: -4663
+Used time:0
+Round: 83
+NowScore: -4663
+Used time:0
+Round: 84
+<4>
+Best Step:-91638.3 Addition:-86975.3
+Dfs Number: [1] 1 [2] 28 [3] 1882 [4] 2562 [5] 170493
+4,2 to 5,2
 0 change to 7
-8 0 13 0
-<3>
-Best Step:71.345
-13,0 to 15,0
-0 change to 7
-13 0 15 0
-<3>
-Best Step:90.7511
-15,0 to 15,3
--8 change to 7
-15 0 15 3
-<3>
-Best Step:109.301
-3,2 to 2,3
-0 change to 11
-3 2 2 3
-<3>
-Best Step:109.301
-2,3 to 2,4
-0 change to 11
-2 3 2 4
-<3>
-Best Step:107.541
-2,4 to 2,3
-0 change to 11
-2 4 2 3
-<3>
-Best Step:105.591
-13,2 to 14,3
-0 change to 1
-13 2 14 3
-<3>
-Best Step:961.251
-14,3 to 15,3
-0 change to 1
-14 3 15 3
-<3>
-Best Step:9.50003e+06
-15,3 to 16,3
--12 change to 1
-15 3 16 3
+4 2 5 2
+-4663Used time:0.03125
+Round: 84
+NowScore: -4663
+Used time:0
+Round: 85
+NowScore: -6163
+Used time:0
+Round: 86
+<4>
+Best Step:-1.74825e+16 Addition:-1.74825e+16
+Dfs Number: [1] 1 [2] 33 [3] 1221 [4] 2200 [5] 159108
+5,4 to 4,3
+0 change to 8
+5 4 4 3
+-6163Used time:0.046875
+Round: 86
+NowScore: -6163
+Used time:0
